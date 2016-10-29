@@ -13,7 +13,7 @@ $Port = "80";               //端口
 $Password = "Password1024.";//密码
 $Method = "aes-256-cfb";    //方式
 //-------------文件-------------//
-$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";
+$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts-Surge.txt";
 $HOSTSFile  = $HOSTSFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $HOSTS = fopen($HOSTSFile,"r");
 $YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";

@@ -7,7 +7,7 @@ header('Content-Disposition: attachment; filename='.'Shadowrocket.Conf');
 //-------------通用-------------//
 $NAME = "CloudGate";        //名称
 //-------------文件-------------//
-$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Shadowrocket-Hosts.txt";
+$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";
 $HOSTSFile  = $HOSTSFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $HOSTS = fopen($HOSTSFile,"r");
 $YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";
@@ -121,8 +121,7 @@ if($Youtube){
 echo"\r\n# Youtube\r\n";
 while(!feof($Youtube))
 {
-echo "202.171.253.111 = ";
-echo trim(fgets($Youtube)).""."\r\n"; 
+echo trim(fgets($Youtube))." = 202.171.253.111"."\r\n"; 
 }
 {
 fclose($Youtube);

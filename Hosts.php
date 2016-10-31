@@ -34,7 +34,7 @@ $S = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+)/','$3 = $1',$R);//第
 $T = preg_replace('/127.0.0.1/','# 127.0.0.1',$S);//第20次替换
 $HOSTS = preg_replace('/::1/','# ::1',$T);//第21次替换
 
-$HOSTSF = fopen("../../Static/Hosts/Surge-Hosts.txt", "w+");
+$HOSTSF = fopen("../../Static/Hosts/Hosts.txt", "w+");
 echo fwrite($HOSTSF, $HOSTS);    //HOSTS
 fclose($HOSTSF);
 ?>

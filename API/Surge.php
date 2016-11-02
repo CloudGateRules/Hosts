@@ -13,12 +13,6 @@ $HOSTS = fopen($HOSTSFile,"r");
 $YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";
 $YoutubeFile  = $YoutubeFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $Youtube = fopen($YoutubeFile,"r");
-$DefaultFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Default.txt";
-$DefaultFile  = $DefaultFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$Default = fopen($DefaultFile,"r");
-$DIRECTFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/DIRECT.txt";
-$DIRECTFile  = $DIRECTFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$DIRECT = fopen($DIRECTFile,"r");
 $REJECTFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/REJECT.txt";
 $REJECTFile  = $REJECTFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $REJECT = fopen($REJECTFile,"r");
@@ -47,36 +41,10 @@ echo "# HOSTS Config File [$NAME]\r\n";
 echo "# Last Modified: " . date("Y/m/d") . "\r\n";
 echo "# \r\n";
 //--------------模块------------//
-//Default
-if($Default){
-echo "\r\n[Rule]";
-echo"\r\n# Default\r\n";
-while(!feof($Default))
-{
-echo trim(fgets($Default)).",DIRECT"."\r\n"; 
-}
-{
-fclose($Default);
-}
-}else {
-  echo "\r\n# Default Module下载失败!\r\n";
-}
-//DIRECT
-if($DIRECT){
-echo"# DIRECT\r\n";
-while(!feof($DIRECT))
-{
-echo trim(fgets($DIRECT)).",DIRECT"."\r\n"; 
-}
-{
-fclose($DIRECT);
-}
-}else {
-  echo "\r\n# DIRECT Module下载失败!\r\n";
-}
 //REJECT
 if($REJECT){
-echo"# REJECT\r\n";
+echo "[Rule]";
+echo"\r\n# REJECT\r\n";
 while(!feof($REJECT))
 {
 echo trim(fgets($REJECT)).",REJECT"."\r\n"; 

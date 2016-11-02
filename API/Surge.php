@@ -116,7 +116,7 @@ fclose($Youtube);
 }
 //Rewrite
 if($Rewrite){
-echo"\r\n# Rewrite\r\n";
+echo"# Rewrite\r\n";
 echo"[URL Rewrite]\r\n";
 while(!feof($Rewrite))
 {

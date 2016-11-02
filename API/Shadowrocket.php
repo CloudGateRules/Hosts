@@ -54,7 +54,7 @@ fclose($REJECT);
 }
 //IPCIDR
 if($IPCIDR){
-echo"\r\n# IP-CIDR\r\n";
+echo"# IP-CIDR\r\n";
 while(!feof($IPCIDR))
 {
 echo "IP-CIDR,";
@@ -99,7 +99,7 @@ fclose($Youtube);
 }
 //Rewrite
 if($Rewrite){
-echo"\r\n# Rewrite\r\n";
+echo"# Rewrite\r\n";
 echo"[URL Rewrite]\r\n";
 while(!feof($Rewrite))
 {

@@ -9,6 +9,12 @@
 
 **更新记录: CloudGate规则 [更新记录](UPdate.txt) 列表**
 
+## 关于项目
+#### Hosts.php是抓取Coding镜像站Hosts文件替换格式并保存转换后的Hosts文件!
+#### API是读取自动生成转换后的Hosts文件,自动转换为代理应用能识别的[.Conf]文件,需要自行替换Hosts Fopen地址!
+#### Hosts.php需要用阿里云监控每15分钟HEAD访问一次,触发自动更新!
+#### 由于Hosts一般有效期只有2-3天,故不提供[.Conf]静态文件!
+
 ## 规则地址
 #### 主用线路: http://UPlus7.Win/Hosts/Surge.php
 #### 备用线路: https://Config.daoapp.io/Hosts/Surge.php

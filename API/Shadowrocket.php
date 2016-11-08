@@ -9,8 +9,8 @@ $NAME = "CloudGate";        //名称
 if( isset($_GET['Fix']) ){$Fix = $_GET['Fix'];}else {$Fix = "false";}
 if( $Fix=="true" ){$GETFix="true";}elseif($Fix=="false"){$GETFix="false";}else {$GETFix="false";}
 //-------------文件-------------//
-if($GETFix=="true"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";}
-elseif ($GETFix=="false"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/HostsFix.txt"}
+if ($GETFix=="true"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/HostsFix.txt";}
+elseif($GETFix=="false"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";}
 $HOSTSFile  = $HOSTSFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $HOSTS = fopen($HOSTSFile,"r");
 $YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";

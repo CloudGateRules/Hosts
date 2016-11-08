@@ -6,8 +6,11 @@ header("Accept-Ranges: bytes");
 header('Content-Disposition: attachment; filename='.'Shadowrocket.Conf');
 //-------------通用-------------//
 $NAME = "CloudGate";        //名称
+if( isset($_GET['Fix']) ){$Fix = $_GET['Fix'];}else {$Fix = "false";}
+if( $Fix=="true" ){$GETFix="true";}elseif($Fix=="false"){$GETFix="false";}else {$GETFix="false";}
 //-------------文件-------------//
-$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";
+if($GETFix=="true"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";}
+elseif ($GETFix=="false"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/HostsFix.txt"}
 $HOSTSFile  = $HOSTSFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
 $HOSTS = fopen($HOSTSFile,"r");
 $YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";
@@ -89,7 +92,8 @@ if($Youtube){
 echo"\r\n# Youtube\r\n";
 while(!feof($Youtube))
 {
-echo trim(fgets($Youtube))." = 202.171.253.111"."\r\n"; 
+if($GETFix=="true"){echo trim(fgets($Youtube))." = 202.171.253.103"."\r\n"; }
+elseif($GETFix=="false"){echo trim(fgets($Youtube))." = 202.171.253.111"."\r\n"; }
 }
 {
 fclose($Youtube);

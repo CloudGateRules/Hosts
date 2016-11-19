@@ -110,7 +110,7 @@ echo"\r\n# Youtube\r\n";
 while(!feof($Youtube))
 {
 if($GETFix=="true"){echo trim(fgets($Youtube))." = 202.171.253.103"."\r\n"; }
-elseif($GETFix=="false"){echo trim(fgets($Youtube))." = 202.171.253.111"."\r\n"; }
+elseif($GETFix=="false"){echo trim(fgets($Youtube))." = 219.76.4.3"."\r\n"; }
 }
 {
 fclose($Youtube);

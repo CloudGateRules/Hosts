@@ -105,8 +105,8 @@ $T     = preg_replace('/127.0.0.1/','# 127.0.0.1',$S);
 $Hosts = preg_replace('/::1/','# ::1',$T);}
 
 # 正则表达式替换规则格式
-if($Fix=="true"){$YouTube = str_replace(".com",".com = $HostsFixIP",$YouTubeCURLF);}
-elseif($Fix=="false"){$YouTube = str_replace(".com",".com = $YouTubeIP",$YouTubeCURLF);}
+if($Fix=="true"){$YouTube = str_replace(".com",".com = $HostsFixIP",$YouTubeCURLF."\r\n");}
+elseif($Fix=="false"){$YouTube = str_replace(".com",".com = $YouTubeIP",$YouTubeCURLF."\r\n");}
 $Default  = preg_replace('/([^])([ \s]+)/','$1,DIRECT$2',$DefaultCURLF."\r\n");
 $REJECT   = preg_replace('/([^])([ \s]+)/','$1,REJECT$2',$REJECTCURLF."\r\n");
 $KEYWORDF = preg_replace('/([^])([ \s]+)/','DOMAIN-KEYWORD,$1$2,force-remote-dns',$KEYWORDCURLF."\r\n");

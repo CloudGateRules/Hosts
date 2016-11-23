@@ -1,136 +1,146 @@
 <?php
-//------------Start-------------//
+
+# 页面禁止缓存 | UTF-8编码 | 触发下载
 header("cache-control:no-cache,must-revalidate");
 header("Content-Type:text/html;charset=UTF-8");
-header("Accept-Ranges: bytes");
-header('Content-Disposition: attachment; filename='.'Hosts.Conf');
-//-------------通用-------------//
-$NAME = "CloudGate";        //名称
-if( isset($_GET['Fix']) ){$Fix = $_GET['Fix'];}else {$Fix = "false";}
-if( $Fix=="true" ){$GETFix="true";}elseif($Fix=="false"){$GETFix="false";}else {$GETFix="false";}
-//-------------文件-------------//
-if ($GETFix=="true"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/HostsFix.txt";}
-elseif($GETFix=="false"){$HOSTSFile = "http://187945.vhost304.cloudvhost.cn/Static/Hosts/Hosts.txt";}
-$HOSTSFile  = $HOSTSFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$HOSTS = fopen($HOSTSFile,"r");
-$YoutubeFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Youtube.txt";
-$YoutubeFile  = $YoutubeFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$Youtube = fopen($YoutubeFile,"r");
-$REJECTFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/REJECT.txt";
-$REJECTFile  = $REJECTFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$REJECT = fopen($REJECTFile,"r");
-$KEYWORDFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/KEYWORD.txt";
-$KEYWORDFile  = $KEYWORDFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$KEYWORD = fopen($KEYWORDFile,"r");
-$IPCIDRFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/IPCIDR.txt";
-$IPCIDRFile  = $IPCIDRFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$IPCIDR = fopen($IPCIDRFile,"r");
-$RewriteFile = "http://7xpphx.com1.z0.glb.clouddn.com/Proxy/File/Rewrite.txt";
-$RewriteFile  = $RewriteFile . '?Sign='.sha1(mt_rand()).'&TimeStamp='.time();
-$Rewrite = fopen($RewriteFile,"r");
-//--------------配置------------//
-echo "#!MANAGED-CONFIG https://Config.daoapp.io/Hosts/Surge-Hosts.php interval=86400\r\n";
+header('Content-Disposition: attachment; filename='.'Surge.Conf');
+
+# 默认模块API托管在Github[GithubUserContent] | 模块数组 | 请求模块禁止缓存
+$ModuleAPI    = "https://raw.githubusercontent.com/BurpSuite/CloudGate-RuleList/master/Rule/";
+$HostsAPI     = "https://raw.githubusercontent.com/racaljk/hosts/master/hosts";
+$ModuleArray  = array("Advanced","Basic","DIRECT","Default","HostsFix","IPCIDR","KEYWORD","REJECT","Rewrite","YouTube","Other","USERAGENT");
+$Cache        = '?Cache='.sha1(mt_rand()).'&TimeStamp='.time();
+
+# 设定参数默认值
+$Module       = "https://raw.githubusercontent.com/BurpSuite/CloudGate-RuleList/master/Module/Module";
+$HostsFixIP   = "202.171.253.103";
+$YouTubeIP    = "219.76.4.3";
+
+# 接收GET请求参数
+$Fix = $_GET['Fix'];
+
+# 检测GET接收参数
+if(empty($Fix)){$Fix="false";}elseif($Fix=="true"){$Fix="true";}else{$Fix="false";}
+
+# 参数组合一起就是完整的模块地址
+$AdvancedFile  = $ModuleAPI.$ModuleArray[0].$Cache;
+$BasicFile     = $ModuleAPI.$ModuleArray[1].$Cache;
+$DIRECTFile    = $ModuleAPI.$ModuleArray[2].$Cache;
+$DefaultFile   = $ModuleAPI.$ModuleArray[3].$Cache;
+$HostsFixFile  = $ModuleAPI.$ModuleArray[4].$Cache;
+$IPCIDRFile    = $ModuleAPI.$ModuleArray[5].$Cache;
+$KEYWORDFile   = $ModuleAPI.$ModuleArray[6].$Cache;
+$REJECTFile    = $ModuleAPI.$ModuleArray[7].$Cache;
+$RewriteFile   = $ModuleAPI.$ModuleArray[8].$Cache;
+$YouTubeFile   = $ModuleAPI.$ModuleArray[9].$Cache;
+$OtherFile     = $ModuleAPI.$ModuleArray[10].$Cache;
+$USERAGENTFile = $ModuleAPI.$ModuleArray[11].$Cache;
+
+# 现在暂时还是单线程,后续可能会改成循环请求或多线程请求
+$HostsModuleCURL    = curl_init();
+if($Fix=="true"){curl_setopt($HostsModuleCURL,CURLOPT_URL,"$HostsFixFile");}
+elseif($Fix=="false"){curl_setopt($HostsModuleCURL,CURLOPT_URL,"$HostsAPI");}
+curl_setopt($HostsModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$HostsCURLF         = curl_exec($HostsModuleCURL);
+curl_close($HostsModuleCURL);
+$YouTubeModuleCURL  = curl_init();
+curl_setopt($YouTubeModuleCURL,CURLOPT_URL,"$YouTubeFile");
+curl_setopt($YouTubeModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$YouTubeCURLF       = curl_exec($YouTubeModuleCURL);
+curl_close($YouTubeModuleCURL);
+$DefaultModuleCURL  = curl_init();
+curl_setopt($DefaultModuleCURL,CURLOPT_URL,"$DefaultFile");
+curl_setopt($DefaultModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$DefaultCURLF       = curl_exec($DefaultModuleCURL);
+curl_close($DefaultModuleCURL);
+$REJECTModuleCURL   = curl_init();
+curl_setopt($REJECTModuleCURL,CURLOPT_URL,"$REJECTFile");
+curl_setopt($REJECTModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$REJECTCURLF        = curl_exec($REJECTModuleCURL);
+curl_close($REJECTModuleCURL);
+$KEYWORDModuleCURL  = curl_init();
+curl_setopt($KEYWORDModuleCURL,CURLOPT_URL,"$KEYWORDFile");
+curl_setopt($KEYWORDModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$KEYWORDCURLF       = curl_exec($KEYWORDModuleCURL);
+curl_close($KEYWORDModuleCURL);
+$IPCIDRModuleCURL   = curl_init();
+curl_setopt($IPCIDRModuleCURL,CURLOPT_URL,"$IPCIDRFile");
+curl_setopt($IPCIDRModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$IPCIDRCURLF        = curl_exec($IPCIDRModuleCURL);
+curl_close($IPCIDRModuleCURL);
+$RewriteModuleCURL  = curl_init();
+curl_setopt($RewriteModuleCURL,CURLOPT_URL,"$RewriteFile");
+curl_setopt($RewriteModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$RewriteCURLF       = curl_exec($RewriteModuleCURL);
+curl_close($RewriteModuleCURL);
+$OtherModuleCURL    = curl_init();
+curl_setopt($OtherModuleCURL,CURLOPT_URL,"$OtherFile");
+curl_setopt($OtherModuleCURL,CURLOPT_RETURNTRANSFER,true);
+$OtherCURLF         = curl_exec($OtherModuleCURL);
+curl_close($OtherModuleCURL);
+
+# 正则表达式替换Hosts格式
+if($Fix=="true"){$Hosts = str_replace(" = "," = $HostsFixIP",$HostsCURLF);}
+elseif($Fix=="false"){
+$A     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\-\w+\-\w+\.\w+\.\w+)/','$3 = $1',$HostsCURLF);
+$B     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\-\w+\.\w+\.\w+\.\w+\.\w+)/','$3 = $1',$A);
+$C     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\-\w+\.\w+\.\w+)/','$3 = $1',$B);
+$D     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\.\w+\.\w+\.\w+\.\w+)/','$3 = $1',$C);
+$E     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\.\w+\.\w+\.\w+)/','$3 = $1',$D);
+$F     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\-\w+\.\w+\.\w+)/','$3 = $1',$E);
+$G     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\.\w+\.\w+\.\w+)/','$3 = $1',$F);
+$H     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\.\w+\.\w+)/','$3 = $1',$G);
+$I     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\-\w+\.\w+)/','$3 = $1',$H);
+$J     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\--\w+\--\w+\--\w+\.\w+\.\w+\.\w+)/','$3 = $1',$I);
+$K     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\--\w+\--\w+\.\w+\.\w+\.\w+)/','$3 = $1',$J);
+$L     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\-\w+\-\w+\-\w+\.\w+\.\w+\.\w+)/','$3 = $1',$K);
+$M     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\.\w+\.\w+\.\w+\.\w+)/','$3 = $1',$L);
+$N     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\.\w+\.\w+\.\w+)/','$3 = $1',$M);
+$O     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\-\w+\.\w+\.\w+)/','$3 = $1',$N);
+$P     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\-\w+\.\w+)/','$3 = $1',$O);
+$Q     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\.\w+\.\w+)/','$3 = $1',$P);
+$R     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+\.\w+)/','$3 = $1',$Q);
+$S     = preg_replace('/(\d+\.\d+\.\d+\.\d+)([ \t]+)(\w+\.\w+)/','$3 = $1',$R);
+$T     = preg_replace('/127.0.0.1/','# 127.0.0.1',$S);
+$Hosts = preg_replace('/::1/','# ::1',$T);}
+
+# 正则表达式替换规则格式
+if($Fix=="true"){$YouTube = str_replace(".com",".com = $HostsFixIP",$YouTubeCURLF);}
+elseif($Fix=="false"){$YouTube = str_replace(".com",".com = $YouTubeIP",$YouTubeCURLF);}
+$Default  = preg_replace('/([^])([ \s]+)/','$1,DIRECT$2',$DefaultCURLF."\r\n");
+$REJECT   = preg_replace('/([^])([ \s]+)/','$1,REJECT$2',$REJECTCURLF."\r\n");
+$KEYWORDF = preg_replace('/([^])([ \s]+)/','DOMAIN-KEYWORD,$1$2,force-remote-dns',$KEYWORDCURLF."\r\n");
+$KEYWORD  = preg_replace('/Proxy/','DIRECT',$KEYWORDF."\r\n");
+$IPCIDRF  = preg_replace('/([^])([ \s]+)/','IP-CIDR,$1$2,no-resolve',$IPCIDRCURLF."\r\n");
+$IPCIDR   = preg_replace('/Proxy/','DIRECT',$IPCIDRF."\r\n");
+$Rewrite  = preg_replace('/([^])([ \s]+)/','$1$2',$RewriteCURLF."\r\n");
+$OtherF   = preg_replace('/([^])([ \s]+)/','$1$2',$OtherCURLF."\r\n");
+$Other    = preg_replace('/Proxy/','DIRECT',$OtherF."\r\n");
+
+# Surge[General]规则模板
+echo "#!MANAGED-CONFIG http://".$_SERVER['SERVER_NAME']."/Rule/General/Hosts.php?Fix=$Fix interval=86400\r\n";
 echo "[General]\r\n";
 echo "bypass-system = true\r\n";
-echo "skip-proxy = 10.0.0.0/8, 17.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, localhost, *.local, ::ffff:0:0:0:0/1, ::ffff:128:0:0:0/1, *.crashlytics.com, *.helpshift.com, *.supercell.net\r\n";
-//echo "bypass-tun = 0.0.0.0/8, 1.0.0.0/9, 1.160.0.0/11, 1.192.0.0/11, 10.0.0.0/8, 14.0.0.0/11, 14.96.0.0/11, 14.128.0.0/11, 14.192.0.0/11, 27.0.0.0/10, 27.96.0.0/11, 27.128.0.0/9, 36.0.0.0/10, 36.96.0.0/11, 36.128.0.0/9, 39.0.0.0/11, 39.64.0.0/10, 39.128.0.0/10, 42.0.0.0/8, 43.224.0.0/11, 45.64.0.0/10, 47.64.0.0/10, 49.0.0.0/9, 49.128.0.0/11, 49.192.0.0/10, 54.192.0.0/11, 58.0.0.0/9, 58.128.0.0/11, 58.192.0.0/10, 59.32.0.0/11, 59.64.0.0/10, 59.128.0.0/9, 60.0.0.0/10, 60.160.0.0/11, 60.192.0.0/10, 61.0.0.0/10, 61.64.0.0/11, 61.128.0.0/10, 61.224.0.0/11, 100.64.0.0/10, 101.0.0.0/9, 101.128.0.0/11, 101.192.0.0/10, 103.0.0.0/10, 103.192.0.0/10, 106.0.0.0/9, 106.224.0.0/11, 110.0.0.0/7, 112.0.0.0/9, 112.128.0.0/11, 112.192.0.0/10, 113.0.0.0/9, 113.128.0.0/11, 113.192.0.0/10, 114.0.0.0/9, 114.128.0.0/11, 114.192.0.0/10, 115.0.0.0/8, 116.0.0.0/8, 117.0.0.0/9, 117.128.0.0/10, 118.0.0.0/11, 118.64.0.0/10, 118.128.0.0/9, 119.0.0.0/9, 119.128.0.0/10, 119.224.0.0/11, 120.0.0.0/10, 120.64.0.0/11, 120.128.0.0/11, 120.192.0.0/10, 121.0.0.0/9, 121.192.0.0/10, 122.0.0.0/7, 124.0.0.0/8, 125.0.0.0/9, 125.160.0.0/11, 125.192.0.0/10, 127.0.0.0/8, 139.0.0.0/11, 139.128.0.0/9, 140.64.0.0/11, 140.128.0.0/11, 140.192.0.0/10, 144.0.0.0/10, 144.96.0.0/11, 144.224.0.0/11, 150.0.0.0/11, 150.96.0.0/11, 150.128.0.0/11, 150.192.0.0/10, 152.96.0.0/11, 153.0.0.0/10, 153.96.0.0/11, 157.0.0.0/10, 157.96.0.0/11, 157.128.0.0/11, 157.224.0.0/11, 159.224.0.0/11, 161.192.0.0/11, 162.96.0.0/11, 163.0.0.0/10, 163.96.0.0/11, 163.128.0.0/10, 163.192.0.0/11, 166.96.0.0/11, 167.128.0.0/10, 167.192.0.0/11, 168.160.0.0/11, 169.254.0.0/16, 171.0.0.0/9, 171.192.0.0/11, 172.16.0.0/12, 175.0.0.0/9, 175.128.0.0/10, 180.64.0.0/10, 180.128.0.0/9, 182.0.0.0/8, 183.0.0.0/10, 183.64.0.0/11, 183.128.0.0/9, 192.0.0.0/24, 192.0.2.0/24, 192.88.99.0/24, 192.96.0.0/11, 192.160.0.0/11, 198.18.0.0/15, 198.51.100.0/24, 202.0.0.0/9, 202.128.0.0/10, 202.192.0.0/11, 203.0.0.0/9, 203.128.0.0/10, 203.192.0.0/11, 210.0.0.0/10, 210.64.0.0/11, 210.160.0.0/11, 210.192.0.0/11, 211.64.0.0/10, 211.128.0.0/10, 218.0.0.0/9, 218.160.0.0/11, 218.192.0.0/10, 219.64.0.0/11, 219.128.0.0/11, 219.192.0.0/10, 220.96.0.0/11, 220.128.0.0/9, 221.0.0.0/11, 221.96.0.0/11, 221.128.0.0/9, 222.0.0.0/8, 223.0.0.0/11, 223.64.0.0/10, 223.128.0.0/9\r\n";
+echo "skip-proxy = 10.0.0.0/8, 17.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, localhost, *.local, ::ffff:0:0:0:0/1, ::ffff:128:0:0:0/1, *.crashlytics.com\r\n";
 echo "bypass-tun = 10.0.0.0/8, 127.0.0.0/24, 172.0.0.0/8, 192.168.0.0/16\r\n";
 echo "dns-server = 8.8.8.8, 8.8.4.4\r\n";
 echo "loglevel = notify\r\n";
 echo "replica = false\r\n";
 echo "ipv6 = false\r\n";
 echo "#  \r\n";
-echo "# HOSTS Config File [$NAME]\r\n";
-echo "# Last Modified: " . date("Y/m/d") . "\r\n";
+echo "# Hosts Config File [CloudGate]\r\n";
+echo "# Download Time: " . date("Y-m-d H:i:s") . "\r\n";
 echo "# \r\n";
-//--------------模块------------//
-//REJECT
-if($REJECT){
-echo "[Rule]";
-echo"\r\n# REJECT\r\n";
-while(!feof($REJECT))
-{
-echo trim(fgets($REJECT)).",REJECT"."\r\n"; 
-}
-{
-fclose($REJECT);
-}
-}else {
-  echo "\r\n# REJECT Module下载失败!\r\n";
-}
-//KEYWORD
-if($KEYWORD){
-echo"# KEYWORD\r\n";
-while(!feof($KEYWORD))
-{
-echo "DOMAIN-KEYWORD,"; 
-echo str_replace("Proxy","DIRECT",trim(fgets($KEYWORD)).",force-remote-dns"."\r\n");
-}
-{
-fclose($KEYWORD);
-}
-}else {
-  echo "\r\n# KEYWORD Module下载失败!\r\n";
-}
-//IPCIDR
-if($IPCIDR){
-echo"# IP-CIDR\r\n";
-while(!feof($IPCIDR))
-{
-echo "IP-CIDR,";
-echo str_replace("Proxy","DIRECT",trim(fgets($IPCIDR)).",no-resolve"."\r\n");
-}
-{
-fclose($IPCIDR);
-}
-}else {
-  echo "\r\n# IPCIDR Module下载失败!\r\n";
-}
-//Other
-echo"# Other\r\n";
-echo"GEOIP,CN,DIRECT\r\n";
-echo"FINAL,DIRECT";
-//HOSTS
-if($HOSTS){
-echo "\r\n[Host]";
-echo"\r\n# HOSTS\r\n";
-while(!feof($HOSTS))
-{
-echo trim(fgets($HOSTS)).""."\r\n"; 
-}
-{
-fclose($HOSTS);
-}
-}else {
-  echo "\r\n# HOSTS Module下载失败!\r\n";
-}
-//Youtube
-if($Youtube){
-echo"\r\n# Youtube\r\n";
-while(!feof($Youtube))
-{
-if($GETFix=="true"){echo trim(fgets($Youtube))." = 202.171.253.103"."\r\n"; }
-elseif($GETFix=="false"){echo trim(fgets($Youtube))." = 219.76.4.3"."\r\n"; }
-}
-{
-fclose($Youtube);
-}
-}else {
-  echo "\r\n# Youtube Module下载失败!\r\n";
-}
-//Rewrite
-if($Rewrite){
-echo"# Rewrite\r\n";
-echo"[URL Rewrite]\r\n";
-while(!feof($Rewrite))
-{
-echo trim(fgets($Rewrite))." header"."\r\n"; 
-}
-{
-fclose($Rewrite);
-}
-}else {
-  echo "\r\n# Rewrite Module下载失败!\r\n";
-}
-exit();
-//--------------END-------------//
+
+# 最后模块内容输出
+echo "[Rule]\r\n";
+echo "# Default\r\n".$Default;
+echo "# REJECT\r\n".$REJECT;
+echo "# KEYWORD\r\n".$KEYWORD;
+echo "# IP-CIDR\r\n".$IPCIDR;
+echo "# Other\r\n".$Other;
+echo "[Host]\r\n";
+echo "# Hosts\r\n".$Hosts;
+echo "# YouTube\r\n".$YouTube;
+echo "[URL Rewrite]\r\n";
+echo "# Rewrite\r\n".$Rewrite;

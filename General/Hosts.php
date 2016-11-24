@@ -1,8 +1,5 @@
 <?php
 
-# 引用Controller控制器模块
-require '../Controller/Controller.php';
-
 # 关闭所有 Notice | Warning 级别的错误
 error_reporting(E_ALL^E_NOTICE^E_WARNING);
 
@@ -15,7 +12,21 @@ header('Content-Disposition: attachment; filename='.'Hosts.Conf');
 if(empty($Fix)){$Fix="false";}elseif($Fix=="true"){$Fix="true";}else{$Fix="false";}
 
 # 判断GET参数
-if($Fix=="true"){$HostsCURLF = $HostsFixCURLF;}elseif($Fix=="false"){$HostsCURLF = $HostsCURLF;}
+if($Fix=="true"){$HostsCURLF=$HostsFixCURLF;}elseif($Fix=="false"){$HostsCURLF = $HostsCURLF;}
+
+# 设置开启哪些模块 | 必须放置在最前面
+$DefaultModule  = "true";
+$REJECTModule   = "true";
+$KEYWORDModule  = "true";
+$IPCIDRModule   = "true";
+$OtherModule    = "true";
+$RewriteModule  = "true";
+$YouTubeModule  = "true";
+$HostsFixModule = "true";
+$HostsModule    = "true";
+
+# 引用Controller控制器模块
+require '../Controller/Controller.php';
 
 # 正则表达式替换Hosts格式
 if($Fix=="true"){$Hosts = str_replace(" = "," = $HostsFixIP",$HostsCURLF);}
@@ -55,7 +66,7 @@ $Rewrite  = preg_replace('/([^])([ \s]+)/','$1$2',$RewriteCURLF."\r\n");
 $OtherF   = preg_replace('/([^])([ \s]+)/','$1$2',$OtherCURLF."\r\n");
 $Other    = preg_replace('/Proxy/','DIRECT',$OtherF."\r\n");
 
-# Surge[General]规则模板
+# Hosts[General]规则模板
 echo "#!MANAGED-CONFIG http://".$_SERVER['SERVER_NAME']."/Rule/General/Hosts.php?Fix=$Fix interval=86400\r\n";
 echo "[General]\r\n";
 echo "bypass-system = true\r\n";

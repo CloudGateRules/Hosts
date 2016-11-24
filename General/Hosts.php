@@ -1,5 +1,8 @@
 <?php
 
+# 引用Controller控制器模块
+require '../Controller/Controller.php';
+
 # 关闭所有 Notice | Warning 级别的错误
 error_reporting(E_ALL^E_NOTICE^E_WARNING);
 
@@ -8,79 +11,11 @@ header("cache-control:no-cache,must-revalidate");
 header("Content-Type:text/html;charset=UTF-8");
 header('Content-Disposition: attachment; filename='.'Hosts.Conf');
 
-# 默认模块API托管在Github[GithubUserContent] | 模块数组 | 请求模块禁止缓存
-$ModuleAPI    = "https://raw.githubusercontent.com/BurpSuite/CloudGate-RuleList/master/Rule/";
-$HostsAPI     = "https://raw.githubusercontent.com/racaljk/hosts/master/hosts";
-$ModuleArray  = array("Advanced","Basic","DIRECT","Default","HostsFix","IPCIDR","KEYWORD","REJECT","Rewrite","YouTube","Other","USERAGENT");
-$Cache        = '?Cache='.sha1(mt_rand()).'&TimeStamp='.time();
-
-# 设定参数默认值
-$Module       = "https://raw.githubusercontent.com/BurpSuite/CloudGate-RuleList/master/Module/Module";
-$HostsFixIP   = "202.171.253.103";
-$YouTubeIP    = "219.76.4.3";
-
-# 接收GET请求参数
-$Fix = $_GET['Fix'];
-
 # 检测GET接收参数
 if(empty($Fix)){$Fix="false";}elseif($Fix=="true"){$Fix="true";}else{$Fix="false";}
 
-# 参数组合一起就是完整的模块地址
-$AdvancedFile  = $ModuleAPI.$ModuleArray[0].$Cache;
-$BasicFile     = $ModuleAPI.$ModuleArray[1].$Cache;
-$DIRECTFile    = $ModuleAPI.$ModuleArray[2].$Cache;
-$DefaultFile   = $ModuleAPI.$ModuleArray[3].$Cache;
-$HostsFixFile  = $ModuleAPI.$ModuleArray[4].$Cache;
-$IPCIDRFile    = $ModuleAPI.$ModuleArray[5].$Cache;
-$KEYWORDFile   = $ModuleAPI.$ModuleArray[6].$Cache;
-$REJECTFile    = $ModuleAPI.$ModuleArray[7].$Cache;
-$RewriteFile   = $ModuleAPI.$ModuleArray[8].$Cache;
-$YouTubeFile   = $ModuleAPI.$ModuleArray[9].$Cache;
-$OtherFile     = $ModuleAPI.$ModuleArray[10].$Cache;
-$USERAGENTFile = $ModuleAPI.$ModuleArray[11].$Cache;
-
-# 现在暂时还是单线程,后续可能会改成循环请求或多线程请求
-$HostsModuleCURL    = curl_init();
-if($Fix=="true"){curl_setopt($HostsModuleCURL,CURLOPT_URL,"$HostsFixFile");}
-elseif($Fix=="false"){curl_setopt($HostsModuleCURL,CURLOPT_URL,"$HostsAPI");}
-curl_setopt($HostsModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$HostsCURLF         = curl_exec($HostsModuleCURL);
-curl_close($HostsModuleCURL);
-$YouTubeModuleCURL  = curl_init();
-curl_setopt($YouTubeModuleCURL,CURLOPT_URL,"$YouTubeFile");
-curl_setopt($YouTubeModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$YouTubeCURLF       = curl_exec($YouTubeModuleCURL);
-curl_close($YouTubeModuleCURL);
-$DefaultModuleCURL  = curl_init();
-curl_setopt($DefaultModuleCURL,CURLOPT_URL,"$DefaultFile");
-curl_setopt($DefaultModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$DefaultCURLF       = curl_exec($DefaultModuleCURL);
-curl_close($DefaultModuleCURL);
-$REJECTModuleCURL   = curl_init();
-curl_setopt($REJECTModuleCURL,CURLOPT_URL,"$REJECTFile");
-curl_setopt($REJECTModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$REJECTCURLF        = curl_exec($REJECTModuleCURL);
-curl_close($REJECTModuleCURL);
-$KEYWORDModuleCURL  = curl_init();
-curl_setopt($KEYWORDModuleCURL,CURLOPT_URL,"$KEYWORDFile");
-curl_setopt($KEYWORDModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$KEYWORDCURLF       = curl_exec($KEYWORDModuleCURL);
-curl_close($KEYWORDModuleCURL);
-$IPCIDRModuleCURL   = curl_init();
-curl_setopt($IPCIDRModuleCURL,CURLOPT_URL,"$IPCIDRFile");
-curl_setopt($IPCIDRModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$IPCIDRCURLF        = curl_exec($IPCIDRModuleCURL);
-curl_close($IPCIDRModuleCURL);
-$RewriteModuleCURL  = curl_init();
-curl_setopt($RewriteModuleCURL,CURLOPT_URL,"$RewriteFile");
-curl_setopt($RewriteModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$RewriteCURLF       = curl_exec($RewriteModuleCURL);
-curl_close($RewriteModuleCURL);
-$OtherModuleCURL    = curl_init();
-curl_setopt($OtherModuleCURL,CURLOPT_URL,"$OtherFile");
-curl_setopt($OtherModuleCURL,CURLOPT_RETURNTRANSFER,true);
-$OtherCURLF         = curl_exec($OtherModuleCURL);
-curl_close($OtherModuleCURL);
+# 判断GET参数
+if($Fix=="true"){$HostsCURLF = $HostsFixCURLF;}elseif($Fix=="false"){$HostsCURLF = $HostsCURLF;}
 
 # 正则表达式替换Hosts格式
 if($Fix=="true"){$Hosts = str_replace(" = "," = $HostsFixIP",$HostsCURLF);}

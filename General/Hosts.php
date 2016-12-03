@@ -1,20 +1,9 @@
 <?php
 
-# 关闭所有 Notice | Warning 级别的错误
-error_reporting(E_ALL^E_NOTICE^E_WARNING);
-
-# 页面禁止缓存 | UTF-8编码 | 触发下载
-header("cache-control:no-cache,must-revalidate");
-header("Content-Type:text/html;charset=UTF-8");
+# 触发下载
 header('Content-Disposition: attachment; filename='.'Hosts.Conf');
 
-# 检测GET接收参数
-if(empty($Fix)){$Fix="false";}elseif($Fix=="true"){$Fix="true";}else{$Fix="false";}
-
-# 判断GET参数
-if($Fix=="true"){$HostsCURLF=$HostsFixCURLF;}elseif($Fix=="false"){$HostsCURLF = $HostsCURLF;}
-
-# 设置开启哪些模块 | 必须放置在最前面
+# 设置开启哪些模块 | 必须放置在Controller控制器前面
 $DefaultModule  = "true";
 $REJECTModule   = "true";
 $KEYWORDModule  = "true";
@@ -27,6 +16,13 @@ $HostsModule    = "true";
 
 # 引用Controller控制器模块
 require '../Controller/Controller.php';
+
+# 检测GET接收参数
+if(empty($Fix)){$Fix="false";}elseif($Fix=="true"){$Fix="true";}else{$Fix="false";}
+
+# 判断GET参数
+if($Fix=="true"){$HostsCURLF=$HostsFixCURLF;}elseif($Fix=="false"){$HostsCURLF = $HostsCURLF;}
+if($HTTPSURL=="true"){$Host="https";}else{$Host="false";}
 
 # 正则表达式替换Hosts格式
 if($Fix=="true"){$Hosts = str_replace(" = "," = $HostsFixIP",$HostsCURLF);}
@@ -67,7 +63,7 @@ $OtherF   = preg_replace('/([^])([ \s]+)/','$1$2',$OtherCURLF."\r\n");
 $Other    = preg_replace('/Proxy/','DIRECT',$OtherF."\r\n");
 
 # Hosts[General]规则模板
-echo "#!MANAGED-CONFIG http://".$_SERVER['SERVER_NAME']."/Rule/General/Hosts.php?Fix=$Fix interval=86400\r\n";
+echo "#!MANAGED-CONFIG $Host://".$_SERVER['SERVER_NAME']."/Rule/General/Hosts.php?Fix=$Fix interval=86400\r\n";
 echo "[General]\r\n";
 echo "bypass-system = true\r\n";
 echo "skip-proxy = 10.0.0.0/8, 17.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, localhost, *.local, ::ffff:0:0:0:0/1, ::ffff:128:0:0:0/1, *.crashlytics.com\r\n";

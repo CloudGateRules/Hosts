@@ -10,14 +10,14 @@
 **更新记录: CloudGate规则 [更新记录](UPdate.txt) 列表**
 
 ## 关于项目
-#### Hosts.php是抓取Coding镜像站Hosts文件替换格式并保存转换后的Hosts文件!
-#### API是读取自动生成转换后的Hosts文件,自动转换为代理应用能识别的[.Conf]文件,需要自行替换Hosts Fopen地址!
-#### Hosts.php需要用阿里云监控每15分钟HEAD访问一次,触发自动更新!
-#### 由于Hosts一般有效期只有2-3天,故不提供[.Conf]静态文件!
+#### 简单快速生成实时Hosts配置文件,需要服务器支持PHP和cURL才能使用!
+#### 项目中的General是规则目录|Controller是控制器目录,可按需求修改!
+#### 更换了原来的Fopen,替换成效率更高的cURL,速度理论能比之前快一倍左右!
+#### 由于Hosts项目API接口在Github,如果服务器在国内,生成速度可能有些慢!
 
 ## 规则地址
-#### 主用线路: http://UPlus7.Win/Hosts/Surge.php
-#### 备用线路: https://Config.daoapp.io/Hosts/Surge.php
+#### 主用线路: https://BurpSuite.Site/Rule/General/Hosts.php
+#### 备用线路: https://Config.daoapp.io/Rule/General/Hosts.php
 
 ## 更新规则
 #### 推荐使用「在线导入」方式更新规则文件

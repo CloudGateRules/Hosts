@@ -3,21 +3,19 @@
 [doodle]: http://www.google.com/logos/doodles/2016/claude-shannons-100th-birthday-5731852344098816.2-hp2x.gif "克劳德·香农诞辰 100 周年"
 [doodle-story]: https://www.google.co.jp/search?q=Google
 
-**使用本项目之前，请先阅读此 [README](README.md) 及下方的许可协议**
+**使用本项目之前，请先阅读此 [README](README.MD) 及下方的许可协议**
 
 **注意: 本规则可能会收集一些广告数据,用于改善规则中存在的问题**
 
-**更新记录: CloudGate规则 [更新记录](UPdate.txt) 列表**
-
 ## 关于项目
-#### 简单快速生成实时Hosts配置文件,需要服务器支持PHP和cURL才能使用!
-#### 项目中的General是规则目录|Controller是控制器目录,可按需求修改!
+#### 简单快速生成实时Hosts配置文件,需要服务器支持PHP和cURL和OpenSSL才可以使用!
+#### 项目中的Basic是规则目录|Controller是控制器目录,可按需求修改!
 #### 更换了原来的Fopen,替换成效率更高的cURL,速度理论能比之前快一倍左右!
 #### 由于Hosts项目API接口在Github,如果服务器在国内,生成速度可能有些慢!
 
 ## 规则地址
-#### 主用线路: https://BurpSuite.Site/Rule/General/Hosts.php
-#### 备用线路: https://Config.daoapp.io/Rule/General/Hosts.php
+#### 主用线路: https://async.be/Rule/Basic/Hosts.php
+#### 备用线路: <hr>https://burpsuite.site/Rule/General/Hosts.php</hr>
 
 ## 更新规则
 #### 推荐使用「在线导入」方式更新规则文件

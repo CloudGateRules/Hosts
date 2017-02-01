@@ -15,7 +15,7 @@
 
 ## 规则地址
 #### 主用线路: https://async.be/Rule/Basic/Hosts.php
-#### 备用线路: <hr>https://burpsuite.site/Rule/General/Hosts.php</hr>
+#### 备用线路: <del>https://burpsuite.site/Rule/General/Hosts.php</del>
 
 ## 更新规则
 #### 推荐使用「在线导入」方式更新规则文件

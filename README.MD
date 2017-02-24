@@ -14,8 +14,7 @@
 #### 由于Hosts项目API接口在Github,如果服务器在国内,生成速度可能有些慢!
 
 ## 规则地址
-#### 主用线路: https://async.be/Rule/Basic/Hosts.php
-#### 备用线路: <del>https://burpsuite.site/Rule/General/Hosts.php</del>
+#### 主用线路: https://async.be/Rule/Basic/Hosts
 
 ## 更新规则
 #### 推荐使用「在线导入」方式更新规则文件
